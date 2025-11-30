@@ -1,29 +1,31 @@
 const mongoose = require('mongoose');
 
-const assignmentSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-    trim: true,
+const assignmentSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    course: {
+      type: String,
+      required: true,
+    },
+    dueDate: {
+      type: Date,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ['Incomplete', 'Complete', 'In Progress'],
+      default: 'Incomplete',
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true, // 🌟 THIS ensures assignments belong to users
+    },
   },
-  course: {
-    type: String,
-    required: true,
-  },
-  dueDate: {
-    type: Date,
-    required: true,
-  },
-  status: {
-    type: String,
-    enum: ['Not Started', 'In Progress', 'Done'],
-    default: 'Not Started',
-  },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-}, { timestamps: true });
+  { timestamps: true }
+);
 
 module.exports = mongoose.model('Assignment', assignmentSchema);

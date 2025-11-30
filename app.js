@@ -7,6 +7,10 @@ const methodOverride = require('method-override');
 
 dotenv.config();
 
+const passport = require('passport');
+require('./config/passport');
+
+
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const assignmentRoutes = require('./routes/assignmentRoutes');
@@ -37,11 +41,16 @@ app.use(
   })
 );
 
-// make user available in views
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Make user available in views
 app.use((req, res, next) => {
-  res.locals.currentUser = req.session.user;
+  res.locals.currentUser = req.user || null;
   next();
 });
+
 
 // routes
 app.use('/', authRoutes);
